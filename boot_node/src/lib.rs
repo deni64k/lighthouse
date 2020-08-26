@@ -62,6 +62,7 @@ fn main<T: EthSpec>(matches: &ArgMatches<'_>, log: slog::Logger) -> Result<(), S
     // Builds a custom executor for the bootnode
     let mut runtime = tokio::runtime::Builder::new()
         .threaded_scheduler()
+        .core_threads(std::cmp::max(1, num_cpus::get_physical() - 1))
         .enable_all()
         .build()
         .map_err(|e| format!("Failed to build runtime: {}", e))?;
